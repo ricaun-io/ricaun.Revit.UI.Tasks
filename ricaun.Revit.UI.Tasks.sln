@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D19BE9E3-4363-4B8B-AE6A-E78BCFAB74DC}") = "ricaun.Revit.UI.Tasks", "ricaun.Revit.UI.Tasks\ricaun.Revit.UI.Tasks.csproj", "{5B0B0CDE-12AC-4737-A1DB-7DBEFD381CD3}"
+EndProject
+Project("{D19BE9E3-4363-4B8B-AE6A-E78BCFAB74DC}") = "Build", "Build\Build.csproj", "{21F3F3ED-BF8A-4CFB-BDDB-E129ED441AF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{312CAE64-D561-477D-8962-FCF03C2A953C}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B0B0CDE-12AC-4737-A1DB-7DBEFD381CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B0B0CDE-12AC-4737-A1DB-7DBEFD381CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B0B0CDE-12AC-4737-A1DB-7DBEFD381CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B0B0CDE-12AC-4737-A1DB-7DBEFD381CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21F3F3ED-BF8A-4CFB-BDDB-E129ED441AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21F3F3ED-BF8A-4CFB-BDDB-E129ED441AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
