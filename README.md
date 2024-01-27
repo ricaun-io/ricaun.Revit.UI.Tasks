@@ -75,7 +75,7 @@ await revitTask.Run((uiapp) => { return 1; });
 This is a list of similar packages for await/Tasks.
 
 * [Revit.Async](https://github.com/KennanChan/Revit.Async)
-* [RevitTaks](https://github.com/WhiteSharq/RevitTask)
+* [RevitTask](https://github.com/WhiteSharq/RevitTask)
 
 ## Release
 
