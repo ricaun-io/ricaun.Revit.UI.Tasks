@@ -8,5 +8,4 @@ namespace ricaun.Revit.UI.Tasks
     {
         public Task<TResult> Run<TResult>(Func<UIApplication, TResult> function);
     }
-
 }
