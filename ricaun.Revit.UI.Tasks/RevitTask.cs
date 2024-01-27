@@ -7,6 +7,7 @@ namespace ricaun.Revit.UI.Tasks
     /// <summary>
     /// RevitTask
     /// </summary>
+    [Obsolete("Use RevitTaskService instead. RevitTaskService has the interface IRevitTask.")]
     public class RevitTask : IRevitTask
     {
         private readonly RevitTaskService revitTaskService;

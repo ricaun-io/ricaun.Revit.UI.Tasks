@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace ricaun.Revit.UI.Tasks.Revit
 {
-
     [AppLoader]
     public class App : IExternalApplication
     {
         private static RibbonPanel ribbonPanel;
         private static RevitTaskService revitTaskService;
-        public static IRevitTask RevitTask { get; private set; }
+        public static IRevitTask RevitTask => revitTaskService;
         public Result OnStartup(UIControlledApplication application)
         {
             revitTaskService = new RevitTaskService(application);
             revitTaskService.Initialize();
 
-            RevitTask = new RevitTask(revitTaskService);
+            // var revitTask = new RevitTask(revitTaskService);
 
             ribbonPanel = application.CreatePanel("Tasks");
             var button = ribbonPanel.CreatePushButton<Commands.Command>()

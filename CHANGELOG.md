@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0] / 2024-01-27
 - First Release
 - Add `RevitTaskService`
-- Add `RevitTask`
+- Add `IRevitTask`
 - Add `IRevitTaskExtension`
 
 [vNext]: ../../compare/1.0.0...HEAD

@@ -1,5 +1,5 @@
 ﻿using Autodesk.Revit.UI;
-using ricaun.Revit.UI.Tasks.Handlers;
+using ricaun.Revit.UI.Tasks.ExternalEvents;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ namespace ricaun.Revit.UI.Tasks
     /// <summary>
     /// RevitTask service to manage and run code in Revit context.
     /// </summary>
-    public class RevitTaskService : IDisposable
+    public class RevitTaskService : IDisposable, IRevitTask
     {
         private readonly UIControlledApplication application;
         private List<ExternalEvent> ExternalEvents = new List<ExternalEvent>();

@@ -35,13 +35,12 @@ Dispose the `RevitTaskService` to stop the `Idling` event.
 revitTaskService.Dispose();
 ```
 
-## RevitTask
+## IRevitTask
 
-The `RevitTask` is a class that implements the `IRevitTask` interface to run Revit code and `await` the code to finish.
-`RevitTask` requires a `RevitTaskService` to run the code inside the `Idling` event.
+The `RevitTaskService` has the interface `IRevitTask` with the `Run` method to execute code in Revit Context.
 
 ```C#
-IRevitTask revitTask = new RevitTask(revitTaskService);
+IRevitTask revitTask = revitTaskService;
 ```
 
 ### Run
@@ -62,17 +61,48 @@ The `IRevitTask` interface has an extension methods for `Run` without `UIApplica
 await revitTask.Run(() => { });
 await revitTask.Run(() => { return 1; });
 await revitTask.Run((uiapp) => { });
-await revitTask.Run((uiapp) => { return 1; });
+```
+
+## Example
+```C#
+public class App : IExternalApplication
+{
+    private static RevitTaskService revitTaskService;
+    public static IRevitTask RevitTask => revitTaskService;
+    public Result OnStartup(UIControlledApplication application)
+    {
+        revitTaskService = new RevitTaskService(application);
+        revitTaskService.Initialize();
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            await RevitTask.Run(() =>
+            {
+                TaskDialog.Show("Revit", "Hello from RevitTask");
+            });
+        });
+
+        return Result.Succeeded;
+    }
+
+    public Result OnShutdown(UIControlledApplication application)
+    {
+        revitTaskService?.Dispose();
+
+        return Result.Succeeded;
+    }
+}
 ```
 
 ## Todo
 
-* Run code if in Revit Context insted of await Task.
-* CancellationToken timeout support.
+* Run code if in `Revit Context` instead of awaiting Task.
+* `CancellationToken` timeout support to prevent infinite await.
 
-## Revit Task References
+## Similar Projects
 
-This is a list of similar packages for await/Tasks.
+There are some similar packages/implementations to run Revit API code in an async way using await/Tasks.
 
 * [Revit.Async](https://github.com/KennanChan/Revit.Async)
 * [RevitTask](https://github.com/WhiteSharq/RevitTask)
