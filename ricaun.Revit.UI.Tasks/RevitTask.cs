@@ -11,10 +11,17 @@ namespace ricaun.Revit.UI.Tasks
     {
         private readonly RevitTaskService revitTaskService;
 
+        /// <summary>
+        /// RevitTask
+        /// </summary>
+        /// <param name="revitTaskService"></param>
         public RevitTask(RevitTaskService revitTaskService)
         {
             this.revitTaskService = revitTaskService;
         }
+        /// <summary>
+        /// Run code in Revit context.
+        /// </summary>
         public Task<TResult> Run<TResult>(Func<UIApplication, TResult> function)
         {
             return revitTaskService.Run(function);

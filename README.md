@@ -67,8 +67,8 @@ await revitTask.Run((uiapp) => { return 1; });
 
 ## Todo
 
-[] Run code if in Revit Context insted of await Task.
-[] CancellationToken support.
+* Run code if in Revit Context insted of await Task.
+* CancellationToken timeout support.
 
 ## Revit Task References
 

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ricaun.Revit.UI.Tasks
 {
+    /// <summary>
+    /// RevitTask service to manage and run code in Revit context.
+    /// </summary>
     public class RevitTaskService : IDisposable
     {
         private readonly UIControlledApplication application;
@@ -13,11 +16,19 @@ namespace ricaun.Revit.UI.Tasks
         private List<IExternalEventHandler> ExternalEventHandlers = new List<IExternalEventHandler>();
         private bool HasInitialized;
 
+        /// <summary>
+        /// RevitTaskService
+        /// </summary>
+        /// <param name="application"></param>
         public RevitTaskService(UIControlledApplication application)
         {
             this.application = application;
         }
 
+        /// <summary>
+        /// Initialize the service
+        /// </summary>
+        /// <remarks>Subscribe to the <see cref="Autodesk.Revit.UI.UIControlledApplication.Idling"/> event.</remarks>
         public void Initialize()
         {
             if (HasInitialized) return;
@@ -25,12 +36,18 @@ namespace ricaun.Revit.UI.Tasks
             HasInitialized = true;
         }
 
+        /// <summary>
+        /// Run code in Revit context.
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="function"></param>
+        /// <returns></returns>
         public Task<TResult> Run<TResult>(Func<UIApplication, TResult> function)
         {
             if (!HasInitialized)
                 return Task.FromException<TResult>(new Exception($"{this.GetType().Name} is not initialized."));
 
-            // Todo: run the function if alrady is in the revit context.
+            // Todo: run the function if already is in the Revit context.
 
             var asyncExternalEventHandler = new AsyncExternalEventHandler<TResult>(function);
             ExternalEventHandlers.Add(asyncExternalEventHandler);
@@ -63,6 +80,10 @@ namespace ricaun.Revit.UI.Tasks
             }
         }
 
+        /// <summary>
+        /// Dispose the service
+        /// </summary>
+        /// <remarks>Unsubscribe to the <see cref="Autodesk.Revit.UI.UIControlledApplication.Idling"/> event.</remarks>
         public void Dispose()
         {
             if (!HasInitialized) return;
