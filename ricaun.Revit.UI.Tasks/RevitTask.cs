@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace ricaun.Revit.UI.Tasks
 {
+    /// <summary>
+    /// RevitTask
+    /// </summary>
     public class RevitTask : IRevitTask
     {
         private readonly RevitTaskService revitTaskService;
