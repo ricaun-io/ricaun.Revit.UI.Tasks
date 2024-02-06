@@ -2,6 +2,8 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using ricaun.Revit.UI;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ricaun.Revit.UI.Tasks.Revit
@@ -17,8 +19,6 @@ namespace ricaun.Revit.UI.Tasks.Revit
             revitTaskService = new RevitTaskService(application);
             revitTaskService.Initialize();
 
-            // var revitTask = new RevitTask(revitTaskService);
-
             ribbonPanel = application.CreatePanel("Tasks");
             var button = ribbonPanel.CreatePushButton<Commands.Command>()
                 .SetLargeImage("/UIFrameworkRes;component/ribbon/images/revit.ico");
@@ -26,12 +26,33 @@ namespace ricaun.Revit.UI.Tasks.Revit
 
             var task = Task.Run(async () =>
             {
-                await Task.Delay(1000);
+                var source = new CancellationTokenSource(1500);
+                var token = source.Token;
 
-                await RevitTask.Run(() =>
+                try
                 {
-                    button.SetText("Tasks");
-                });
+                    await Task.Delay(1000, token);
+
+                    await RevitTask.Run(() =>
+                    {
+                        Thread.Sleep(1000);
+                        button.SetText("Tasks");
+                    }, token);
+
+                    await RevitTask.Run(() =>
+                    {
+                        button.SetText("Tasks Canceled");
+                    }, token);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    source.Dispose();
+                }
+
             });
 
             return Result.Succeeded;

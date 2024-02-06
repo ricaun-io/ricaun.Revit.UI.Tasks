@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.UI;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ricaun.Revit.UI.Tasks
@@ -9,6 +10,13 @@ namespace ricaun.Revit.UI.Tasks
     /// </summary>
     public static class IRevitTaskExtension
     {
+        /// <summary>
+        /// Run code in Revit context.
+        /// </summary>
+        public static Task<TResult> Run<TResult>(this IRevitTask revitTask, Func<UIApplication, TResult> function)
+        {
+            return revitTask.Run(function, CancellationToken.None);
+        }
         /// <summary>
         /// Run code in Revit context.
         /// </summary>
@@ -29,6 +37,27 @@ namespace ricaun.Revit.UI.Tasks
         public static Task Run(this IRevitTask revitTask, Action action)
         {
             return revitTask.Run(uiapp => action());
+        }
+        /// <summary>
+        /// Run code in Revit context.
+        /// </summary>
+        public static Task<TResult> Run<TResult>(this IRevitTask revitTask, Func<TResult> function, CancellationToken cancellationToken)
+        {
+            return revitTask.Run<TResult>(uiapp => function(), cancellationToken);
+        }
+        /// <summary>
+        /// Run code in Revit context.
+        /// </summary>
+        public static Task Run(this IRevitTask revitTask, Action<UIApplication> action, CancellationToken cancellationToken)
+        {
+            return revitTask.Run<object>(uiapp => { action(uiapp); return null; }, cancellationToken);
+        }
+        /// <summary>
+        /// Run code in Revit context.
+        /// </summary>
+        public static Task Run(this IRevitTask revitTask, Action action, CancellationToken cancellationToken)
+        {
+            return revitTask.Run(uiapp => action(), cancellationToken);
         }
     }
 }

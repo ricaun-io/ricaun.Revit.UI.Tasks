@@ -2,6 +2,7 @@
 using ricaun.Revit.UI.Tasks.ExternalEvents;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ricaun.Revit.UI.Tasks
@@ -41,15 +42,19 @@ namespace ricaun.Revit.UI.Tasks
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="function"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<TResult> Run<TResult>(Func<UIApplication, TResult> function)
+        public Task<TResult> Run<TResult>(Func<UIApplication, TResult> function, CancellationToken cancellationToken)
         {
             if (!HasInitialized)
                 return Task.FromException<TResult>(new Exception($"{this.GetType().Name} is not initialized."));
 
             // Todo: run the function if already is in the Revit context.
 
-            var asyncExternalEventHandler = new AsyncExternalEventHandler<TResult>(function);
+            if (cancellationToken.IsCancellationRequested)
+                return Task.FromCanceled<TResult>(cancellationToken);
+
+            var asyncExternalEventHandler = new AsyncExternalEventHandlerCancellation<TResult>(function, cancellationToken);
             ExternalEventHandlers.Add(asyncExternalEventHandler);
             return asyncExternalEventHandler.AsyncResult();
         }
@@ -60,6 +65,9 @@ namespace ricaun.Revit.UI.Tasks
             {
                 if (ExternalEventHandlers.Remove(asyncExternalEventHandler))
                 {
+                    if (asyncExternalEventHandler is IDisposable disposable)
+                        disposable.Dispose();
+
                     var externalEvent = ExternalEvent.Create(asyncExternalEventHandler);
                     externalEvent.Raise();
                     ExternalEvents.Add(externalEvent);

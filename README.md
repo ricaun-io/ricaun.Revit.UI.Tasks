@@ -48,22 +48,30 @@ IRevitTask revitTask = revitTaskService;
 
 ### Run
 
-The `Run` method runs the code inside Revit Context and `await` the code to finish.
+The `Run` method runs the code inside Revit Context and `await` the code to finish with a `CancellationToken`.
 
 ```C#
+CancellationToken token = CancellationToken.None;
 UIApplication uiapp = await revitTask.Run((uiapp) =>
 {
     // Code run inside Revit Context
     return uiapp;
-});
+}, token);
 ```
 
-The `IRevitTask` interface has an extension methods for `Run` without `UIApplication` and `return`.
+The `IRevitTask` interface has an extension methods for `Run` without `UIApplication` or `CancellationToken` and `return`.
 
 ```C#
 await revitTask.Run(() => { });
 await revitTask.Run(() => { return 1; });
 await revitTask.Run((uiapp) => { });
+await revitTask.Run((uiapp) => { return 1; });
+```
+
+```C#
+await revitTask.Run(() => { }, token);
+await revitTask.Run(() => { return 1; }, token);
+await revitTask.Run((uiapp) => { }, token);
 ```
 
 ## Example
