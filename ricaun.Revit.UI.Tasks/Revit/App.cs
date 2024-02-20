@@ -23,39 +23,51 @@ namespace ricaun.Revit.UI.Tasks.Revit
             var button = ribbonPanel.CreatePushButton<Commands.Command>()
                 .SetLargeImage("/UIFrameworkRes;component/ribbon/images/revit.ico");
 
+            ribbonPanel.RowStackedItems(
+                ribbonPanel.CreatePushButton<Commands.CommandTokenInContext>()
+                   .SetLargeImage("/UIFrameworkRes;component/ribbon/images/revit.ico"),
+                ribbonPanel.CreatePushButton<Commands.CommandTokenDelay>()
+                   .SetLargeImage("/UIFrameworkRes;component/ribbon/images/revit.ico")
+                );
 
-            var task = Task.Run(async () =>
-            {
-                var source = new CancellationTokenSource(1500);
-                var token = source.Token;
 
-                try
-                {
-                    await Task.Delay(1000, token);
+            //var task = Task.Run(async () =>
+            //{
+            //    var source = new CancellationTokenSource(1500);
+            //    var token = source.Token;
 
-                    await RevitTask.Run(() =>
-                    {
-                        Thread.Sleep(1000);
-                        button.SetText("Tasks");
-                    }, token);
+            //    try
+            //    {
+            //        await Task.Delay(1000, token);
 
-                    await RevitTask.Run(() =>
-                    {
-                        button.SetText("Tasks Canceled");
-                    }, token);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    source.Dispose();
-                }
+            //        await RevitTask.Run(() =>
+            //        {
+            //            Thread.Sleep(1000);
+            //            button.SetText("Tasks");
+            //        }, token);
 
-            });
+            //        await RevitTask.Run(() =>
+            //        {
+            //            button.SetText("Tasks Canceled");
+            //        }, token);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //    finally
+            //    {
+            //        source.Dispose();
+            //    }
+
+            //});
 
             return Result.Succeeded;
+        }
+
+        private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public Result OnShutdown(UIControlledApplication application)

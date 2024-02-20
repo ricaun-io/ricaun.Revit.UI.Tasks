@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.UI;
+using ricaun.Revit.UI.Tasks.Extensions;
 using ricaun.Revit.UI.Tasks.ExternalEvents;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace ricaun.Revit.UI.Tasks
     /// </summary>
     public class RevitTaskService : IDisposable, IRevitTask
     {
-        private readonly UIControlledApplication application;
+        private UIApplication uiapp;
         private List<ExternalEvent> ExternalEvents = new List<ExternalEvent>();
         private List<IExternalEventHandler> ExternalEventHandlers = new List<IExternalEventHandler>();
         private bool HasInitialized;
@@ -21,9 +22,17 @@ namespace ricaun.Revit.UI.Tasks
         /// RevitTaskService
         /// </summary>
         /// <param name="application"></param>
-        public RevitTaskService(UIControlledApplication application)
+        public RevitTaskService(UIControlledApplication application) : this(application.GetUIApplication())
         {
-            this.application = application;
+        }
+
+        /// <summary>
+        /// RevitTaskService
+        /// </summary>
+        /// <param name="uiapp"></param>
+        public RevitTaskService(UIApplication uiapp)
+        {
+            this.uiapp = uiapp;
         }
 
         /// <summary>
@@ -33,7 +42,7 @@ namespace ricaun.Revit.UI.Tasks
         public void Initialize()
         {
             if (HasInitialized) return;
-            application.Idling += Application_Idling;
+            uiapp.Idling += Application_Idling;
             HasInitialized = true;
         }
 
@@ -49,10 +58,21 @@ namespace ricaun.Revit.UI.Tasks
             if (!HasInitialized)
                 return Task.FromException<TResult>(new Exception($"{this.GetType().Name} is not initialized."));
 
-            // Todo: run the function if already is in the Revit context.
-
             if (cancellationToken.IsCancellationRequested)
                 return Task.FromCanceled<TResult>(cancellationToken);
+
+            if (uiapp.InContext())
+            {
+                try
+                {
+                    var result = function.Invoke(uiapp);
+                    return Task.FromResult(result);
+                }
+                catch (Exception ex)
+                {
+                    return Task.FromException<TResult>(ex);
+                }
+            }
 
             var asyncExternalEventHandler = new AsyncExternalEventHandlerCancellation<TResult>(function, cancellationToken);
             ExternalEventHandlers.Add(asyncExternalEventHandler);
@@ -61,6 +81,8 @@ namespace ricaun.Revit.UI.Tasks
 
         private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
         {
+            uiapp = sender as UIApplication;
+
             foreach (var asyncExternalEventHandler in ExternalEventHandlers)
             {
                 if (ExternalEventHandlers.Remove(asyncExternalEventHandler))
@@ -95,7 +117,7 @@ namespace ricaun.Revit.UI.Tasks
         public void Dispose()
         {
             if (!HasInitialized) return;
-            application.Idling -= Application_Idling;
+            uiapp.Idling -= Application_Idling;
 
             ExternalEvents.Clear();
             ExternalEventHandlers.Clear();
