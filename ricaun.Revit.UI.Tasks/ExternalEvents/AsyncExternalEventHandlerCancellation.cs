@@ -42,6 +42,9 @@ namespace ricaun.Revit.UI.Tasks.ExternalEvents
         {
             try
             {
+                if (AsyncResult().IsCompleted)
+                    return;
+
                 var result = function.Invoke(uiapp);
                 tcs.TrySetResult(result);
             }
