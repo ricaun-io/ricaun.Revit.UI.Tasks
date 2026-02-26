@@ -110,7 +110,6 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIconUrl />
   </PropertyGroup>
 
   <PropertyGroup Condition="!$(Configuration.Contains('Debug'))">
