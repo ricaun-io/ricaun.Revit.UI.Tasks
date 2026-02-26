@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Features
 - Build for multiple target frameworks: `net46`, `net47`, `net48`, `net8.0-windows`, `net10.0-windows`.
 ### Updates
-- Update `nupkg` configuration with license and tags.
+- Update `nupkg` configuration with license and tags. (Fix: #1)
 - Update `Build` configuration to `net10`.
 
 ## [1.0.0] / 2024-01-27 - 2024-02-20

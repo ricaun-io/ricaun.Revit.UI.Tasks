@@ -91,7 +91,7 @@
     <Company>ricaun</Company>
     <Authors>Luiz Henrique Cassettari</Authors>
     <Description>Use Task to run Revit API code.</Description>
-    <PackageTags>autodesk;revit;api;task</PackageTags>
+    <PackageTags>autodesk;revit;api;task;async;await</PackageTags>
     <CopyrightYears>$([System.DateTime]::Now.ToString('yyyy'))</CopyrightYears>
   </PropertyGroup>
 
