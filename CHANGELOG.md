@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [1.0.1] / 2026-02-26
+### Features
+- Build for multiple target frameworks: `net46`, `net47`, `net48`, `net8.0-windows`, `net10.0-windows`.
 ### Updates
 - Update `nupkg` configuration with license and tags.
 - Update `Build` configuration to `net10`.
